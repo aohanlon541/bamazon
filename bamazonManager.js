@@ -45,10 +45,10 @@ var questions = function(answer) {
                 questions();
             });
         }
-        if (answer.managerMenu === "Add to Inventory") {
-            var addInventoryQuestions = function(answer) {
+        if (answer.managerMenu === "Add New Invetory") {
+            var addNewItemsQuestions = function(answer) {
                 inquirer.prompt([{
-                        name: "restockID",
+                        name: "new",
                         message: "What's the ID of the product you'd like to restock?",
                     },
                     {
@@ -56,7 +56,7 @@ var questions = function(answer) {
                         message: "How many units would you like to add",
                     }
                 ]).then(function(answer) {
-                    connection.query("SELECT * FROM products", [answer.restockID], function(err, res) {
+                    connection.query("SELECT * FROM products", function(err, res) {
                         if (err) throw err;
 
                         connection.query("UPDATE products SET ? WHERE ?", [{
@@ -71,18 +71,47 @@ var questions = function(answer) {
 
                             });
                         console.log("Inventory Added!");
-                        console.log("\nID:" + res[0].item_id + " | " + res[0].product_name + " | " + res[0].department_name + " | $" + res[0].price + " | " + res[0].stock_quantity);
                         questions();
                     });
                 });
             }
-
             addInventoryQuestions();
+        }
+        if (answer.managerMenu === "Add New Product") {
+            var addNewProductQuestions = function(answer) {
+                inquirer.prompt([{
+                        name: "newProductName",
+                        message: "What's the name of the new product?",
+                    },
+                    {
+                        name: "newProductDepartment",
+                        message: "What department is this product in?",
+                    },
+                    {
+                        name: "newProductPrice",
+                        message: "What is the price of this new product?",
+                    },
+                    {
+                        name: "newProductQuantity",
+                        message: "What is the quantity of the new product?",
+                    }
+                ]).then(function(answer) {
+                    connection.query("INSERT INTO products SET ?", {
+                        product_name: answer.newProductName,
+                        department_name: answer.newProductDepartment,
+                        price: answer.newProductPrice,
+                        stock_quantity: answer.newProductQuantity
+                    }, function(err, res) {});
+                    console.log("Product Added!");
+                    questions();
+                });
+            }
+
+            addNewProductQuestions();
 
         }
 
-
     });
-}
 
+}
 questions();
