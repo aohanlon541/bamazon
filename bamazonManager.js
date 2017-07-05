@@ -19,7 +19,7 @@ var questions = function(answer) {
         type: "list",
         name: "managerMenu",
         message: "Please select an option below",
-        choices: ["View Products for Sale", "View Low Inventory", "Add to Inventory", "Add New Product"]
+        choices: ["View Products for Sale", "View Low Inventory", "Add to Inventory", "Add New Product", "View Product Sales by Department", "Create New Department"]
     }]).then(function(answer) {
         if (answer.managerMenu === "View Products for Sale") {
             connection.query("SELECT * FROM products", function(err, res) {
@@ -109,6 +109,16 @@ var questions = function(answer) {
 
             addNewProductQuestions();
 
+        }
+        if (answer.managerMenu === "View Product Sales by Department") {
+            connection.query("SELECT * FROM departments", function(err, res) {
+                console.log("-----------------------------------");
+                for (var i = 0; i < res.length; i++) {
+                    console.log("\nID:" + res[i].department_id + " | " + res[i].department_name + " | " + res[i].department_name + " | $" + res[i].price + " | " + res[i].stock_quantity);
+                }
+                console.log("-----------------------------------");
+                questions();
+            });
         }
 
     });

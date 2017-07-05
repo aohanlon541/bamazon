@@ -19,3 +19,10 @@ CREATE TABLE departments (
   
   PRIMARY KEY (department_id)
 );
+
+ALTER TABLE products
+ADD COLUMN product_sales INT(7) NULL;
+
+ALTER TABLE departments
+ADD COLUMN product_sales INT(7) NULL;
+ADD COLUMN total_profit INT(7) NULL;

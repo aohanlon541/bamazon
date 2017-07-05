@@ -1,6 +1,8 @@
 var inquirer = require("inquirer");
 var mysql = require("mysql");
 
+var total;
+
 var connection = mysql.createConnection({
     host: "localhost",
     port: 3306,
@@ -15,7 +17,7 @@ var connection = mysql.createConnection({
 
 connection.query("SELECT * FROM products", function(err, res) {
     for (var i = 0; i < res.length; i++) {
-        console.log("\nID:" + res[i].item_id + " | " + res[i].product_name + " | " + res[i].department_name + " | $" + res[i].price + " | " + res[i].stock_quantity);
+        console.log("\nID:" + res[i].item_id + " | " + res[i].product_name + " | " + res[i].department_name + " | $" + res[i].price + " | " + res[i].stock_quantity + " | " + res[i].product_sales);
     }
     console.log("-----------------------------------");
     questions();
@@ -31,12 +33,14 @@ var questions = function(answer) {
             message: "How many units would you like?",
         }
     ]).then(function(answer) {
-        connection.query("SELECT * FROM products", [answer.id], function(err, res) {
+        connection.query("SELECT * FROM products WHERE item_id=?", [answer.id], function(err, res) {
             if (err) throw err;
+
+            var currentStock = res[0].stock_quantity - answer.quantity;
 
             if (res[0].stock_quantity > answer.quantity) {
                 connection.query("UPDATE products SET ? WHERE ?", [{
-                            stock_quantity: res[0].stock_quantity - answer.quantity
+                            stock_quantity: currentStock
                         },
                         {
                             item_id: answer.id
@@ -45,13 +49,25 @@ var questions = function(answer) {
                     function(err, res) {
                         if (err) throw err;
                     });
-                console.log("Quantity: " + answer.quantity);
-                console.log("Price: $" + res[0].price);
-                console.log("Your Total: $" + answer.quantity * res[0].price);
+                total = answer.quantity * res[0].price;
+                console.log("Your Total: $" + total);
             } else {
                 console.log("Insufficient quantity!");
             }
 
+            connection.query("UPDATE products SET ? WHERE ?", [{
+                product_sales: res[0].product_sales + total
+                },
+                {
+                    item_id: answer.id
+                }
+                ],
+                function(err, res) {
+                    if (err) throw err;
+                });
         });
     });
 }
+
+questions()
+;
