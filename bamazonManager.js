@@ -103,6 +103,12 @@ var questions = function(answer) {
                         stock_quantity: answer.newProductQuantity
                     }, function(err, res) {});
                     console.log("Product Added!");
+
+                    connection.query("INSERT INTO department SET ?", {
+                        product_name: answer.newProductDepartment,
+                        over_head_costs: 8000,
+                    }, function(err, res) {});
+
                     questions();
                 });
             }
