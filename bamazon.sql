@@ -8,7 +8,6 @@ CREATE TABLE products (
   department_name VARCHAR(45) NULL,
   price INT(6) NULL,
   stock_quantity INT(6) NULL,
-
   PRIMARY KEY (item_id)
 );
 
@@ -32,7 +31,7 @@ ADD UNIQUE (department_name);
 SELECT 
     department_name, SUM(total_profit) AS totalProfit
 FROM
-    products
+    departments
         INNER JOIN
-    departments USING (department_name)
+    products USING (department_name)
 GROUP BY department_name;
