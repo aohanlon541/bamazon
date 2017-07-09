@@ -104,11 +104,6 @@ var questions = function(answer) {
                     }, function(err, res) {});
                     console.log("Product Added!");
 
-                    connection.query("INSERT INTO department SET ?", {
-                        product_name: answer.newProductDepartment,
-                        over_head_costs: 8000,
-                    }, function(err, res) {});
-
                     questions();
                 });
             }
@@ -117,12 +112,34 @@ var questions = function(answer) {
 
         }
         if (answer.managerMenu === "View Product Sales by Department") {
-            connection.query("SELECT * FROM departments", function(err, res) {
+            connection.query("SELECT * FROM department_final", function(err, res) {
                 console.log("-----------------------------------");
                 for (var i = 0; i < res.length; i++) {
-                    console.log("\nID:" + res[i].department_id + " | " + res[i].department_name + " | " + res[i].department_name + " | $" + res[i].price + " | " + res[i].stock_quantity);
+                    console.log("\nID:" + res[i].department_id + " | " + res[i].department_name + " | " + res[i].over_head_costs + " | $" + res[i].product_sales + " | " + res[i].final_profit);
                 }
                 console.log("-----------------------------------");
+                questions();
+            });
+        }
+        if (answer.managerMenu === "Create New Department") {
+            connection.query("SELECT * FROM department_final", function(err, res) {
+                var addNewProductQuestions = function(answer) {
+                    inquirer.prompt([{
+                            name: "newDepartmentName",
+                            message: "What's the name of the new department?",
+                        },
+                        {
+                            name: "newDepartmentOverhead",
+                            message: "What department's overhead costs?",
+                        }
+                    ]).then(function(answer) {
+                        connection.query("INSERT INTO department_final SET ?", {
+                            department_name: answer.newDepartmentName,
+                            over_head_costs: answer.newDepartmentOverhead,
+                        }, function(err, res) {});
+                        console.log("Department Added!");
+                    });
+                }
                 questions();
             });
         }
