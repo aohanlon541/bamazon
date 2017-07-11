@@ -28,7 +28,10 @@ ADD COLUMN total_profit INT(7) NULL;
 ALTER TABLE departments
 ADD UNIQUE (department_name);
 
-SELECT department_name, SUM(product_sales)
-FROM bamazon_db.products
-GROUP BY department_name
+CREATE TABLE deparment_final AS 
+  (SELECT department_join.*, 
+	(product_sales - over_head_costs) as final_profit
+   FROM   department_join 
+);
 
+RENAME TABLE deparment_final TO department_final
