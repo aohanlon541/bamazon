@@ -20,7 +20,6 @@ connection.query("SELECT * FROM products", function(err, res) {
         console.log("\nID:" + res[i].item_id + " | " + res[i].product_name + " | " + res[i].department_name + " | $" + res[i].price + " | " + res[i].stock_quantity + " | " + res[i].product_sales);
     }
     console.log("-----------------------------------");
-    questions();
 });
 
 var questions = function(answer) {

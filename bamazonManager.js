@@ -46,9 +46,9 @@ var questions = function(answer) {
             });
         }
         if (answer.managerMenu === "Add New Invetory") {
-            var addNewItemsQuestions = function(answer) {
+            var addInventoryQuestions = function(answer) {
                 inquirer.prompt([{
-                        name: "new",
+                        name: "restockID",
                         message: "What's the ID of the product you'd like to restock?",
                     },
                     {

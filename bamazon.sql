@@ -28,10 +28,7 @@ ADD COLUMN total_profit INT(7) NULL;
 ALTER TABLE departments
 ADD UNIQUE (department_name);
 
-SELECT 
-    department_name, SUM(total_profit) AS totalProfit
-FROM
-    departments
-        INNER JOIN
-    products USING (department_name)
-GROUP BY department_name;
+SELECT department_name, SUM(product_sales)
+FROM bamazon_db.products
+GROUP BY department_name
+
