@@ -5,4 +5,4 @@ The app will take in orders from customers and deplete stock from the store's in
 Javascript, Node.js, mySQL
 
 
-![screenshot-1](screenshot1.png)
+![screenshot-1](img/screenshot1.png)
