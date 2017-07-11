@@ -5,5 +5,4 @@ The app will take in orders from customers and deplete stock from the store's in
 Javascript, Node.js, mySQL
 
 
-![GitHub Logo](screenshot1.png)
-Format: ![Alt Text](url)
+![screenshot-1](screenshot1.png)
